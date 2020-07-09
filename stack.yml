@@ -1,0 +1,40 @@
+version: "3.3"
+
+services:
+  edge:
+    image: traefik:2.2
+    command:
+      - --providers.docker
+      - --api.insecure=true
+      - --log.level=DEBUG
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  web:
+    image: nginx
+    labels:
+      - traefik.http.routers.web.rule=Host(`renderws`)
+  cicd:
+    image: jenkins
+    labels:
+      - traefik.http.routers.cicd.rule=(Host(`renderws`) && PathPrefix(`/jenkins`))
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    environment:
+      - JENKINS_OPTS=--prefix=/jenkins
+  gitlocal:
+    image: gitea/gitea
+    volumes:
+      - ./gitea:/data
+    ports:
+      - "3000:3000"
+      - "222:22"
+    environment:
+      - ROOT_URL=/gitea
+    labels:
+      - traefik.http.services.gitlocal.loadbalancer.server.port=3000
+      - traefik.http.routers.gitlocal.rule=Host(`renderws`)
+      - traefik.http.routers.gitlocal.middlewares=gitlocal-stripprefix
+      - "traefik.http.middlewares.gitlocal-stripprefix.stripprefix.prefixes=/gitea"

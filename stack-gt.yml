@@ -1,0 +1,25 @@
+version: "3.3"
+
+services:
+  edge:
+    image: traefik:2.2
+    command:
+      - --providers.docker
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  gitlocal:
+    image: gitea/gitea
+    volumes:
+      - ./gitea:/data
+    ports:
+      - "3000:3000"
+      - "222:22"
+    environment:
+      - ROOT_URL=/gitea
+    labels:
+      - traefik.http.services.gitlocal.loadbalancer.server.port=3000
+      - traefik.http.routers.gitlocal.rule=Host(`renderws`)
+      - traefik.http.routers.gitlocal.middlewares=gitlocal-stripprefix
+      - "traefik.http.middlewares.gitlocal-stripprefix.stripprefix.prefixes=/gitea"
