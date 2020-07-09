@@ -1,0 +1,19 @@
+version: "3.3"
+
+services:
+  edge:
+    image: traefik:2.2
+    command:
+      - --providers.docker
+      - --api.insecure=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "80:80"
+      - "8080:8080"
+  ttyd:
+    image: tsl0922/ttyd
+    labels:
+      - traefik.http.routers.ttyd.rule=(Host(`renderws`) && PathPrefix(`/ttyd`))
+      - traefik.http.routers.ttyd.middlewares=ttyd-stripprefix
+      - traefik.http.middlewares.ttyd-stripprefix.stripprefix.prefixes=/ttyd

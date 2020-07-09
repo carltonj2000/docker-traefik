@@ -1,6 +1,6 @@
 # Docker And Traefik
 
-Docker with Traefik hosting nginx, jenkins, gitlocal.
+Docker with Traefik hosting nginx, jenkins, gitlocal and ttyd.
 
 ## History
 
