@@ -20,6 +20,6 @@ services:
       - ROOT_URL=/gitea
     labels:
       - traefik.http.services.gitlocal.loadbalancer.server.port=3000
-      - traefik.http.routers.gitlocal.rule=Host(`renderws`)
+      - traefik.http.routers.gitlocal.rule=(Host(`renderws`) && PathPrefix(`/gitea`))
       - traefik.http.routers.gitlocal.middlewares=gitlocal-stripprefix
       - "traefik.http.middlewares.gitlocal-stripprefix.stripprefix.prefixes=/gitea"
