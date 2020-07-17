@@ -1,0 +1,18 @@
+version: "3.3"
+
+services:
+  edge:
+    image: traefik:2.2
+    command:
+      - --providers.docker
+      - --api.insecure=true
+      - --log.level=DEBUG
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  web:
+    image: nginx
+    labels:
+      - traefik.http.routers.web.rule=(Host(`localhost`) || Host(`renderws`))

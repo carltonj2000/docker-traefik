@@ -1,0 +1,23 @@
+{
+  "name": "docker-traefik",
+  "version": "1.0.0",
+  "description": "Docker with Traefik hosting nginx, jenkins, gitlocal and ttyd.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carltonj2000/docker-traefik.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carltonj2000/docker-traefik/issues"
+  },
+  "homepage": "https://github.com/carltonj2000/docker-traefik#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
